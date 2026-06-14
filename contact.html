@@ -183,12 +183,28 @@
               type="submit"><span class="btn__text">Send Message</span></button>
           </form>
           <!-- end of form -->
+           <div id="toast-container"></div>
            <script>
+            function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 4000);
+}
+
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const data = {
         name: document.querySelector('[name="name"]').value,
+        subject: document.querySelector('[name="subject"]').value,
         email: document.querySelector('[name="email"]').value,
         message: document.querySelector('[name="message"]').value
     };
@@ -205,8 +221,11 @@ document.getElementById('contactForm').addEventListener('submit', async function
         const result = await response.json();
 
         alert('Message sent successfully!');
+        form.reset();
+        showToast('✅ Message sent successfully!');
     } catch (error) {
-        alert('Failed to send message.');
+        // Show error toast
+        showToast('❌ Failed to send message. Please try again.');
     }
 });
 </script>
